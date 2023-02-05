@@ -15,7 +15,7 @@ struct QAP{
 // position is an array that can be understand as 
 // a function position[i] is a number between 0 and
 // problem.N-1, it's the position of a facility
-int get_cost( QAP problem, int *positions );
+int get_cost( QAP problem, vector<int> positions );
 // Function  to make a QAP problem given the minimum
 QAP make_QAP( int N, vector<vector<int>> D, vector<vector<int>> W );
 // Function to transform the structure to a string 

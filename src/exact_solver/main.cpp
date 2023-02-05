@@ -1,24 +1,24 @@
 #include <iostream>
 #include "solver/solver.hpp"
-#include "../QAP/QAP.hpp"
+#include <cstdlib>
 
 using namespace std;
 
 int main() {
     
-	cout << "Prueba "<<endl;
-    cout << solver() << endl;
-
-    int n = 10; 
+    int n = 7; 
     vector<vector<int>> D = vector<vector<int>>( n, vector<int>(n,1) );
     vector<vector<int>> W = vector<vector<int>>( n, vector<int>(n,2) );
 
-    int position[n]={};
-    for(int i=0; i<n; i++) position[i] = i;
+    for(int i=0;i<n;i++) for(int j=0;j<n;j++){
+        D[i][j] = rand()%100;
+        W[i][j] = rand()%100;
+    }
 
     QAP problem = make_QAP( n, D, W );
-    cout << QAP_to_string( problem ) << '\n';
-    cout << get_cost( problem, position ) << '\n';
+    vector<int> sol = solver(problem);
+    for(int p: sol) cout << p << " ";
+    cout << endl;
 
     return 0;
 }
