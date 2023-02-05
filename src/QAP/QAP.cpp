@@ -2,7 +2,7 @@
 
 const string ERROR_BAD_POSITION = "ERROR: BAD POSITION in QAP/get_cost";
 
-int get_cost( QAP problem, int *position ){
+int get_cost( QAP problem, vector<int> position ){
   int n = problem.N;
 
   // check if position is a permutation of [0..n-1]
