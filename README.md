@@ -1,2 +1,2 @@
 # QAProblem
-This repository will have different solvers for the QAP problem.
+This repository will have different solvers for the Quadratic assignment problem.
