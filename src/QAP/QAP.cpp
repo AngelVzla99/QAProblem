@@ -1,4 +1,5 @@
 #include "QAP.hpp"
+#include <fstream>
 
 const string ERROR_BAD_POSITION = "ERROR: BAD POSITION in QAP/get_cost";
 
@@ -69,4 +70,38 @@ string QAP_solution_to_string( QAP_solution solution ){
     ans += " ";
   }
   return ans;
+}
+
+QAP read_QAP( string filename ){
+  ifstream file(filename);
+  if ( !file.is_open() ) {
+    cout << "ERROR: file " << filename << " not found\n";
+    exit(1);
+  }
+
+  int N;
+  file >> N;
+  cout << "Reading QAP problem of size " << N << '\n';
+  vector<vector<int>> D(N, vector<int>(N));
+  vector<vector<int>> W(N, vector<int>(N));
+
+  cout << "D: " << D.size() << " " << D[0].size() << '\n';
+  FOR(i,0,N){
+    FOR(j,0,N){
+      file >> D[i][j];
+      cout << D[i][j] << " ";
+    }
+    cout << '\n';
+  }
+
+  cout << "W: " << W.size() << " " << W[0].size() << '\n';
+  FOR(i,0,N){
+    FOR(j,0,N){
+      file >> W[i][j];
+      cout << W[i][j] << " ";
+    }
+    cout << '\n';
+  }
+
+  return make_QAP(N, D, W);
 }

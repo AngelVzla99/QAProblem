@@ -2,7 +2,7 @@
 
 int main() {
     printf("Local search solver main\n");
-    int n = 4; 
+    int n = 7; 
     vector<vector<int>> D = vector<vector<int>>( n, vector<int>(n,1) );
     vector<vector<int>> W = vector<vector<int>>( n, vector<int>(n,2) );
 

@@ -29,5 +29,7 @@ QAP make_QAP( int N, vector<vector<int>> D, vector<vector<int>> W );
 string QAP_to_string( QAP problem );
 // Function to transform the solution to a string
 string QAP_solution_to_string( QAP_solution solution );
+// Function to read a QAP problem from a file
+QAP read_QAP( string filename );
 
 #endif // QAP_HPP
