@@ -62,3 +62,19 @@ QAP_solution local_search_solution(QAP instance_qap) {
     solution.positions = new_positions;
     return solution;
 }
+
+
+QAP_solution start_local_search_solution(vector<int> start, QAP instance_qap){
+    vector<int> old_positions, new_positions;
+    new_positions = start;
+
+    do {
+        old_positions = new_positions;
+        new_positions = find_best_neighbour(instance_qap, old_positions);
+    } while (new_positions != old_positions);
+
+    QAP_solution solution;
+    solution.cost = get_cost(instance_qap, new_positions);
+    solution.positions = new_positions;
+    return solution;
+}

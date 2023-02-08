@@ -30,4 +30,16 @@ vector<int> find_best_neighbour(QAP instance_qap, vector<int> positions);
  */
 QAP_solution local_search_solution(QAP instance_qap);
 
+/**
+ * @brief Implements a local search algorithm to solve the QAP starting in 
+ * a specific position in the space
+ * 
+ * @param[in]  start First position in the space to make local search
+ * @param[in]  instance_qap  The instance of a quadratic assignment problem
+ * 
+ * @return     { cost, positions } 
+ */
+QAP_solution start_local_search_solution(vector<int> start, QAP instance_qap);
+
+
 #endif // LOCAL_SEARCH_HPP
