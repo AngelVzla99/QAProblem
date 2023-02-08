@@ -38,7 +38,7 @@ QAP make_QAP( int N, vector<vector<int>> D, vector<vector<int>> W ){
 }
 
 string QAP_to_string( QAP problem ){
-  string ans = "";
+  string ans = "Size: " + to_string(problem.N) + "\n\n";
 
   ans += "Distance matrix \n";
   FOR(i,0,problem.N){
@@ -58,5 +58,15 @@ string QAP_to_string( QAP problem ){
     ans += "\n";
   }
 
+  return ans;
+}
+
+string QAP_solution_to_string( QAP_solution solution ){
+  string ans = "Cost: " + to_string(solution.cost) + "\n";
+  ans += "Positions: ";
+  FOR(i,0,solution.positions.size()){
+    ans += to_string( solution.positions[i] );
+    ans += " ";
+  }
   return ans;
 }
