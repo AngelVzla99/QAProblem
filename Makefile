@@ -18,7 +18,10 @@ ILSS = $(wildcard $(ILSS_DIR)/solver/*.cpp)
 
 all: main_exact_solver main_local_search main_iterative_local_search main_benchmark
 
-main_benchmark: $(OBJ_DIR)/qap.o $(OBJ_DIR)/es.o $(OBJ_DIR)/lss.o $(OBJ_DIR)/main_benchmark.o
+$(OBJ_DIR)/qap.o: $(QAP)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+main_benchmark: $(OBJ_DIR)/qap.o $(OBJ_DIR)/es.o $(OBJ_DIR)/lss.o $(OBJ_DIR)/ilss.o $(OBJ_DIR)/main_benchmark.o
 	$(CC) -o $(BIN_DIR)/$@ $^
 
 $(OBJ_DIR)/main_benchmark.o: $(SRC_DIR)/main.cpp
@@ -40,9 +43,6 @@ $(OBJ_DIR)/lss.o: $(LSS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR)/main_lss.o: $(LSS_DIR)/main.cpp
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJ_DIR)/qap.o: $(QAP)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 main_iterative_local_search: $(OBJ_DIR)/qap.o $(OBJ_DIR)/lss.o $(OBJ_DIR)/ilss.o $(OBJ_DIR)/main_ilss.o 

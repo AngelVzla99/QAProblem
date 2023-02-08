@@ -1,3 +1,5 @@
+#ifndef ITERATIVE_LOCAL_SEARCH_HPP
+#define ITERATIVE_LOCAL_SEARCH_HPP
 #define FOR(i, n, m) for (int i = n; i < (int)m; i++)
 #include <iostream>
 #include <vector>
@@ -11,7 +13,7 @@
 using namespace std;
 
 typedef long long ll;
-const ll INFLL = 1e18;
+// const ll INFLL = 1e18;
 const double PER_SIMILARITY = 0.85;
 
 /**
@@ -23,3 +25,4 @@ const double PER_SIMILARITY = 0.85;
  */
 QAP_solution iterative_local_search_solution(QAP instance_qap);
 
+#endif // ITERATIVE_LOCAL_SEARCH_HPP

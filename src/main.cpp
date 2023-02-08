@@ -4,6 +4,7 @@
 #include "QAP/QAP.hpp"
 #include "exact_solver/solver/solver.hpp"
 #include "local_search_solver/solver/local_search.hpp"
+#include "iterative_local_search_solver/solver/iterative_local_search.hpp"
 
 const string QAP_INSTANCE_PATH = "benchmark/qapdata/";
 const string QAP_INSTANCE_EXTENSION = ".dat";
@@ -29,9 +30,15 @@ void run_benchmark(const string problem_name = "", const string type_alg = "", c
     problems = get_problems();
   }
 
-  // write to file solution_comparison.csv
-  ofstream solution_comparison("benchmark/solution_comparison.csv");
-  solution_comparison << "Problem, N, Exact, Local Search, Exact Time, Local Search Time\n";
+  cout << "Number of problems: " << problems.size() << '\n';
+
+  // write to each file solution_exact.csv, solution_local_search.csv and solution_iterative_local_search.csv
+  ofstream solution_exact("benchmark/solution_exact.csv");
+  solution_exact << "Problem, N, Solution, Time\n";
+  ofstream solution_local_search("benchmark/solution_local_search.csv");
+  solution_local_search << "Problem, N, Solution, Time\n";
+  ofstream solution_iterative_local_search("benchmark/solution_iterative_local_search.csv");
+  solution_iterative_local_search << "Problem, N, Solution cost, Time\n";
 
   for (auto problem : problems) {
     cout << "Problem: " << problem << '\n';
@@ -45,7 +52,7 @@ void run_benchmark(const string problem_name = "", const string type_alg = "", c
     ll exact_solution_cost = -1;
     chrono::microseconds exact_duration = chrono::microseconds(0);
 
-    if (type_alg != "local_search") {
+    if (type_alg == "exact") {
       // exact solver
       cout << "Exact solver:\n";
       auto start = chrono::high_resolution_clock::now();
@@ -55,24 +62,35 @@ void run_benchmark(const string problem_name = "", const string type_alg = "", c
       exact_solution_cost = get_cost(qap, exact_solution);
       cout << "Solution: " << exact_solution_cost << '\n';
       cout << "Time: " << exact_duration.count() << " microseconds\n";
+      // write to file solution_exact.csv
+      solution_exact << problem << ", " << qap.N << ", " << exact_solution_cost << ", " << exact_duration.count() << '\n';
     }
 
-    ll ls_solution_cost = -1;
-    chrono::microseconds ls_duration = chrono::microseconds(0);
     // local search solver
-    if (type_alg != "exact") {
+    if (type_alg == "local_search") {
       cout << "Local search solver:\n";
       auto start = chrono::high_resolution_clock::now();
       auto ls_solution = local_search_solution(qap);
       auto end = chrono::high_resolution_clock::now();
-      ls_duration = chrono::duration_cast<chrono::microseconds>(end - start);
+      auto ls_duration = chrono::duration_cast<chrono::microseconds>(end - start);
       cout << "Solution: " << ls_solution.cost << '\n';
       cout << "Time: " << ls_duration.count() << " microseconds\n";
-      ls_solution_cost = ls_solution.cost;
+      // write to file solution_local_search.csv
+      solution_local_search << problem << ", " << qap.N << ", " << ls_solution.cost << ", " << ls_duration.count() << '\n';
     }
 
-    // write to file solution_comparison.csv
-    solution_comparison << problem << ", " << qap.N << ", " << exact_solution_cost << ", " << ls_solution_cost << ", " << exact_duration.count() << ", " << ls_duration.count() << '\n';
+    // iterative local search solver
+    if (type_alg == "iterative_local_search") {
+      cout << "Iterative local search solver:\n";
+      auto start = chrono::high_resolution_clock::now();
+      auto ls_solution = iterative_local_search_solution(qap);
+      auto end = chrono::high_resolution_clock::now();
+      auto ls_duration = chrono::duration_cast<chrono::microseconds>(end - start);
+      cout << "Solution: " << ls_solution.cost << '\n';
+      cout << "Time: " << ls_duration.count() << " microseconds\n";
+      // write to file solution_iterative_local_search.csv
+      solution_iterative_local_search << problem << ", " << qap.N << ", " << ls_solution.cost << ", " << ls_duration.count() << '\n';
+    }
   }
 }
 
@@ -94,7 +112,7 @@ void print_help() {
  * -h, --help: show help
  * -b, --benchmark: run benchmark, execute all problems, a second optional
  *                 argument can be passed to specify witch algorithm to use
- *                (e.g. exact, local_search)
+ *                (e.g. exact, local_search, iterative_local_search)
  * -p, --problem: run benchmark with a specific problem the next argument
  *               must be the problem name without the extension (e.g. chr12a)
  *               a third optional argument can be passed to specify witch 
