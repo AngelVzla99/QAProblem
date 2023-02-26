@@ -2,6 +2,7 @@
 #include <fstream>
 
 const string ERROR_BAD_POSITION = "ERROR: BAD POSITION in QAP/get_cost";
+const string ERROR_REPEATED_VALUE = "ERROR: REPEATED VALUE in QAP/get_cost";
 
 int get_cost( QAP problem, vector<int> position ){
   int n = problem.N;
@@ -16,7 +17,7 @@ int get_cost( QAP problem, vector<int> position ){
     }
     // repeated elements
     if( cnt[position[i]] ){
-      cout << ERROR_BAD_POSITION << '\n';
+      cout << ERROR_REPEATED_VALUE + " " << position[i] << " "<< i << '\n';
       exit(1);
     }
     cnt[position[i]]++;
