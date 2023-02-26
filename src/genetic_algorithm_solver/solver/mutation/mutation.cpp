@@ -83,7 +83,7 @@ vector<QAP_solution> mutation( QAP &instance_qap, int iteration, vector<QAP_solu
   vector<QAP_solution (*)(QAP&,QAP_solution)> mutations = {two_swap,insertion,mess,inversion};
 
   // number of times the same mutation will be applied to the same individual
-  int amount_of_mutations = 2;
+  int amount_of_mutations = 1 + iteration/4;
   for(auto individual : population){ 
     if( rand()%MUTATION_PROBABILITY == 0 ){
       int mutation = rand()%mutations.size();

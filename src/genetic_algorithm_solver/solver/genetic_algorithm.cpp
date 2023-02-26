@@ -34,8 +34,8 @@ vector<QAP_solution> buildInitialPopulation(QAP instance_qap, int amount){
  * 
  * @return     True if the genetic algorithm has to stop, false otherwise
  */
-bool end_genetic_algorithm( int iterations, vector<QAP_solution> population ){
-  return iterations>50;
+bool end_genetic_algorithm( int iterations, vector<QAP_solution> population, int max_iterations ){
+  return iterations>max_iterations;
 }
 
 /**
@@ -72,7 +72,6 @@ vector<QAP_solution> select_survivors( vector<QAP_solution> population, vector<Q
   ); 
   FOR(i,0,min(population_size,int(population.size()))) 
     ans.push_back(population[i]);
-  cout << "El mejor de la poblacion es: " << ans[0].cost << " (borrar)" << '\n';
   return ans;
 }
 
@@ -83,17 +82,21 @@ vector<QAP_solution> select_survivors( vector<QAP_solution> population, vector<Q
  * 
  * @return     { cost, positions } 
  */
-QAP_solution genetic_algorithm(QAP instance_qap, int population_size){
+QAP_solution genetic_algorithm(QAP instance_qap, int population_size, int max_iterations){
   QAP_solution ans = {};
-  cout << "Comenzando a ejecutar el algorimot genetico (borrar)\n";
   vector<QAP_solution> population = buildInitialPopulation( instance_qap, population_size );
 
   int iteration = 0;
-  while( !end_genetic_algorithm(iteration,population) ){
+  while( !end_genetic_algorithm(iteration,population,max_iterations) ){
     vector<QAP_solution> parents = select_parents( population );
-    vector<QAP_solution> children = crossover( parents );
+    vector<QAP_solution> children = crossover( instance_qap, parents );
     children = mutation( instance_qap, iteration, children );
     population = select_survivors( population, children, population_size );
+
+    // save the best solution
+    if( population[0].cost < ans.cost || iteration==0 ) 
+      ans = population[0];
+    
     iteration++;
   }
 

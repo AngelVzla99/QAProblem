@@ -6,7 +6,7 @@ using namespace std;
 
 int main() {
 
-    int n = 20; 
+    int n = 22; 
     vector<vector<int>> D = vector<vector<int>>( n, vector<int>(n,1) );
     vector<vector<int>> W = vector<vector<int>>( n, vector<int>(n,2) );
 
@@ -16,7 +16,7 @@ int main() {
     }
 
     QAP problem = make_QAP( n, D, W );
-    QAP_solution sol = genetic_algorithm(problem, 10);
+    QAP_solution sol = genetic_algorithm(problem, 10, 80);
     cout << QAP_solution_to_string(sol) << '\n';
 
     return 0;
