@@ -6,7 +6,7 @@ using namespace std;
 
 int main() {
     
-    int n = 7; 
+    int n = 6; 
     vector<vector<int>> D = vector<vector<int>>( n, vector<int>(n,1) );
     vector<vector<int>> W = vector<vector<int>>( n, vector<int>(n,2) );
 

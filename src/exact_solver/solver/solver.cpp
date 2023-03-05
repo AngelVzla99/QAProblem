@@ -103,25 +103,27 @@ pair<ll,vector<int>> facSolver( QAP problem ){
 // ======================
 
 vector<int> solver( QAP problem ){  
-  // save the problem as a global variables 
-  cuProblem = problem;
+  // ==>  solver using DP
 
-  // find the best solution
-  vector<int> cuPos = vector<int>(problem.N,-1);
-  nxt.clear();
-  dp.clear();
-  used.clear();
-  ll bestVal = dpSolver( cuPos );
-  cout << "Best cost = " << bestVal << '\n';
+  // // save the problem as a global variables 
+  // cuProblem = problem;
 
-  // recreate the solution 
-  while( nxt[cuPos].first!=-1 ){
-    pair<int,int> temp = nxt[cuPos];
-    cuPos[temp.first] = temp.second;
-  }
+  // // find the best solution
+  // vector<int> cuPos = vector<int>(problem.N,-1);
+  // nxt.clear();
+  // dp.clear();
+  // used.clear();
+  // ll bestVal = dpSolver( cuPos );
+  // cout << "Best cost = " << bestVal << '\n';
 
-  // pair<ll,vector<int>> ans2 = facSolver(problem);
-  // cout << "=> " << ans2.first << endl;
+  // // recreate the solution 
+  // while( nxt[cuPos].first!=-1 ){
+  //   pair<int,int> temp = nxt[cuPos];
+  //   cuPos[temp.first] = temp.second;
+  // }
 
-  return cuPos;
+  // ===> solver using factorial
+  pair<ll,vector<int>> ans = facSolver(problem);
+
+  return ans.second;
 }
