@@ -11,4 +11,4 @@ using namespace std;
 typedef long long ll;
 const ll INFLL =1e18;
 
-vector<int> solver( QAP problem );
+QAP_solution solver( QAP problem );
