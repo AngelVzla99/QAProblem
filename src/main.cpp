@@ -7,6 +7,7 @@
 #include "local_search_solver/solver/local_search.hpp"
 #include "iterative_local_search_solver/solver/iterative_local_search.hpp"
 #include "thread_killer/thread_killer.hpp"
+#include "genetic_algorithm_solver/solver/genetic_algorithm.hpp"
 
 unsigned int microsecond = 1000000;
 const string QAP_INSTANCE_PATH = "benchmark/qapdata/";
@@ -15,6 +16,10 @@ const string QAP_INSTANCE_SOLUTION_PATH = "benchmark/qapsoln/";
 const string QAP_INSTANCE_SOLUTION_EXTENSION = ".sln";
 
 namespace fs = std::filesystem;
+
+QAP_solution genetic_algorithm_default(QAP instance_qap){
+  return genetic_algorithm(instance_qap, 100, 60);
+}
 
 vector<string> get_problems() {
   vector<string> problems;
@@ -37,7 +42,7 @@ void run_benchmark(const string problem_name = "", const string type_alg = "", c
 
   // write to each file solution_exact.csv, solution_local_search.csv and solution_iterative_local_search.csv
   ofstream solution_file("benchmark/solution_file_"+type_alg+".csv");
-  solution_file << "Problem, N, Solution, Time\n";
+  solution_file << "Problem,N,Solution,Time\n";
 
   // pointer to the solver to be used
   QAP_solution (*f_solver)(QAP) = nullptr;
@@ -47,6 +52,8 @@ void run_benchmark(const string problem_name = "", const string type_alg = "", c
     f_solver = local_search_solution;
   }else if( type_alg == "iterative_local_search" ) {
     f_solver = iterative_local_search_solution;
+  }else if( type_alg == "genetic_algorithm" ) {
+    f_solver = genetic_algorithm_default;    
   }else{
     cout << "Invalid algorithm\n";
     exit(1);

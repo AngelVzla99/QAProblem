@@ -1,4 +1,4 @@
-Problem, N, Solution, Time
+Problem,N,Solution,Time
 benchmark/qapdata/chr15a.dat, 15, 13918, 1000.26
 benchmark/qapdata/ste36c.dat, 36, 9408782, 1000.29
 benchmark/qapdata/tai10b.dat, 10, 1347679, 1000.19

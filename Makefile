@@ -36,7 +36,7 @@ $(OBJ_DIR)/qap.o: $(QAP)
 
 # Benchmark 
 
-main_benchmark: $(OBJ_DIR)/qap.o $(OBJ_DIR)/es.o $(OBJ_DIR)/lss.o $(OBJ_DIR)/ilss.o $(OBJ_DIR)/main_benchmark.o $(OBJ_DIR)/thKiller.o
+main_benchmark: $(OBJ_DIR)/qap.o $(OBJ_DIR)/es.o $(OBJ_DIR)/lss.o $(OBJ_DIR)/ilss.o $(OBJ_DIR)/main_benchmark.o $(OBJ_DIR)/thKiller.o $(OBJ_DIR)/gas_mut.o $(OBJ_DIR)/gas_cros.o $(OBJ_DIR)/gas.o
 	$(CC) -o $(BIN_DIR)/$@ $^
 
 $(OBJ_DIR)/main_benchmark.o: $(SRC_DIR)/main.cpp
