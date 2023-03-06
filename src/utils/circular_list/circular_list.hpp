@@ -26,10 +26,10 @@ bool is_in_list(circular_list *list, pair<int, int> value);
 
 template <typename T>
 class circular_list_t {
+ public:
   vector<T> list;
   int limit;
 
- public:
   circular_list_t(int limit) { this->limit = limit; }
   void add_element(T value) {
     list.push_back(value);

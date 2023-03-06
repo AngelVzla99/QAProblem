@@ -82,26 +82,26 @@ QAP read_QAP( string filename ){
 
   int N;
   file >> N;
-  cout << "Reading QAP problem of size " << N << '\n';
+  // cout << "Reading QAP problem of size " << N << '\n';
   vector<vector<int>> D(N, vector<int>(N));
   vector<vector<int>> W(N, vector<int>(N));
 
-  cout << "D: " << D.size() << " " << D[0].size() << '\n';
+  // cout << "D: " << D.size() << " " << D[0].size() << '\n';
   FOR(i,0,N){
     FOR(j,0,N){
       file >> D[i][j];
-      cout << D[i][j] << " ";
+      // cout << D[i][j] << " ";
     }
-    cout << '\n';
+    // cout << '\n';
   }
 
-  cout << "W: " << W.size() << " " << W[0].size() << '\n';
+  // cout << "W: " << W.size() << " " << W[0].size() << '\n';
   FOR(i,0,N){
     FOR(j,0,N){
       file >> W[i][j];
-      cout << W[i][j] << " ";
+      // cout << W[i][j] << " ";
     }
-    cout << '\n';
+    // cout << '\n';
   }
 
   return make_QAP(N, D, W);

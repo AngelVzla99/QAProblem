@@ -24,6 +24,7 @@ vector<int> perturbation( QAP_solution current_sol, vector<QAP_solution> mem ){
 }
 
 QAP_solution iterative_local_search_solution(QAP instance_qap){
+  cout << "Iterative local search solver\n";
   // generate a random solution to QAP
   vector<int> rand_sol = generate_random_positions( instance_qap.N );
   // first local search

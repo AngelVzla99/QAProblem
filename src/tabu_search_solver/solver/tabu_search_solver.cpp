@@ -24,7 +24,7 @@ element nth_best_neighbour(QAP instance_qap, element positions, int n) {
       }
     }
   }
-  return new_circular_list.get_element(n - 1);
+  return new_circular_list.list[new_circular_list.list.size() - 1];
 }
 
 QAP_solution local_search_solution_modified(QAP instance_qap,
@@ -191,7 +191,7 @@ QAP_solution tabu_search_solution(QAP instance_qap) {
       tabu_list = make_circular_list(rand_sol.size());
       // S' <- bestElementInAcceptantNeighborhood(S', tabu)
       solution.positions = best_element_in_acceptant_neighborhood(
-          instance_qap, solution, &tabu_list);
+          instance_qap, best_solution, &tabu_list);
       // S' <- localSearch(S')
       solution = local_search_solution_modified(instance_qap, solution,
                                                 sqrt(instance_qap.N));
@@ -211,25 +211,26 @@ QAP_solution tabu_search_solution(QAP instance_qap) {
       continue;
     }
     // intensification
-    best_solution = intensification(best_features, best_solution, instance_qap);
-    if (best_solution.cost < solution.cost) {
-      prev_solution = best_solution;
+    solution = intensification(best_features, best_solution, instance_qap);
+    if (solution.cost < best_solution.cost) {
+      best_solution = solution;
       // memory.push_back(best_solution);
       best_features.clear();
-      best_features_all_time.push_back(tabu_list);
+      // best_features_all_time.push_back(tabu_list);
       continue;
     }
     // diversification
-    best_solution =
+    solution =
         diversification(best_features_all_time, best_solution, instance_qap);
-    if (best_solution.cost < solution.cost) {
+    if (solution.cost < best_solution.cost) {
       prev_solution = best_solution;
+      best_solution = solution;
       // memory.push_back(best_solution);
-      best_features.clear();
-      best_features_all_time.push_back(tabu_list);
+      // best_features.clear();
+      // best_features_all_time.push_back(tabu_list);
       continue;
     }
     break;
   }
-  return solution;
+  return best_solution;
 }

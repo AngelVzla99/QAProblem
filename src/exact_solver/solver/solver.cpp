@@ -102,7 +102,8 @@ pair<ll,vector<int>> facSolver( QAP problem ){
 //        solver       //
 // ======================
 
-vector<int> solver( QAP problem ){  
+QAP_solution solver( QAP problem ){  
+  cout << "Exact solver\n";
   // ==>  solver using DP
 
   // // save the problem as a global variables 
@@ -125,5 +126,5 @@ vector<int> solver( QAP problem ){
   // ===> solver using factorial
   pair<ll,vector<int>> ans = facSolver(problem);
 
-  return ans.second;
+  return {ans.first,ans.second};
 }

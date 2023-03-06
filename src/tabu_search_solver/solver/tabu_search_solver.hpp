@@ -4,7 +4,7 @@
 #include "../../local_search_solver/solver/local_search.hpp"
 #include "../../utils/circular_list/circular_list.hpp"
 
-const ll INFLL = 1e18;
+// const ll INFLL = 1e18;
 
 // new type to define
 typedef pair<int, int> movement;
