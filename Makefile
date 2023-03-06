@@ -2,7 +2,8 @@
 # We can push them ....... and delete this (TODO)
 
 CC = g++
-CFLAGS = -I -g -w -Wall -std=c++17
+# CFLAGS = -I -g -w -Wall -std=c++17 -g
+CFLAGS = -g
 OBJ_DIR = objs
 SRC_DIR = src
 BIN_DIR = bin
@@ -23,6 +24,12 @@ ILSS = $(wildcard $(ILSS_DIR)/solver/*.cpp)
 
 GAS_DIR = $(SRC_DIR)/genetic_algorithm_solver
 GAS = $(wildcard $(GAS_DIR)/solver/*.cpp)
+
+TS_DIR = $(SRC_DIR)/tabu_search_solver
+TS = $(wildcard $(TS_DIR)/solver/*.cpp)
+
+UTILS_DIR = $(SRC_DIR)/utils
+CL = $(wildcard $(UTILS_DIR)/circular_list/*.cpp)
 
 all: main_exact_solver main_local_search main_iterative_local_search main_benchmark
 
@@ -87,6 +94,22 @@ $(OBJ_DIR)/gas_cros.o: $(GAS_DIR)/solver/crossover/crossover.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR)/main_gas.o: $(GAS_DIR)/main.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Tabu search
+
+main_tabu_search: $(OBJ_DIR)/qap.o $(OBJ_DIR)/lss.o $(OBJ_DIR)/cl.o $(OBJ_DIR)/ts.o $(OBJ_DIR)/main_ts.o 
+	$(CC) -o $(BIN_DIR)/$@ $^
+
+$(OBJ_DIR)/ts.o: $(TS)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJ_DIR)/main_ts.o: $(TS_DIR)/main.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Utils
+
+$(OBJ_DIR)/cl.o: $(CL)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # Clean files
