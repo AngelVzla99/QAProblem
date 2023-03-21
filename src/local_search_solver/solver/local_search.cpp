@@ -37,20 +37,20 @@ vector<int> find_best_neighbour(QAP instance_qap, vector<int> positions) {
 }
 
 QAP_solution local_search_solution(QAP instance_qap) {
-    printf("Local search solution\n");
+    cout << "Local search solver\n";
 
-    cout << "\nInstance\n\n";
-    cout << QAP_to_string(instance_qap) << '\n';
+    // cout << "\nInstance\n\n";
+    // cout << QAP_to_string(instance_qap) << '\n';
 
     vector<int> old_positions, new_positions;
 
     new_positions = generate_random_positions(instance_qap.N);
 
-    cout << "Initial positions\n";
-    for (int i=0;i<instance_qap.N;i++) {
-        cout << new_positions[i] << " ";
-    }
-    cout << '\n';
+    // cout << "Initial positions\n";
+    // for (int i=0;i<instance_qap.N;i++) {
+    //     cout << new_positions[i] << " ";
+    // }
+    // cout << '\n';
 
     do {
         old_positions = new_positions;
@@ -62,7 +62,6 @@ QAP_solution local_search_solution(QAP instance_qap) {
     solution.positions = new_positions;
     return solution;
 }
-
 
 QAP_solution start_local_search_solution(vector<int> start, QAP instance_qap){
     vector<int> old_positions, new_positions;

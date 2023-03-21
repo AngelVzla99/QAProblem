@@ -1,17 +1,25 @@
 #include <iostream>
 #include <filesystem>
 #include <fstream>
+#include <unistd.h>
 #include "QAP/QAP.hpp"
 #include "exact_solver/solver/solver.hpp"
 #include "local_search_solver/solver/local_search.hpp"
 #include "iterative_local_search_solver/solver/iterative_local_search.hpp"
+#include "thread_killer/thread_killer.hpp"
+#include "genetic_algorithm_solver/solver/genetic_algorithm.hpp"
 
+unsigned int microsecond = 1000000;
 const string QAP_INSTANCE_PATH = "benchmark/qapdata/";
 const string QAP_INSTANCE_EXTENSION = ".dat";
 const string QAP_INSTANCE_SOLUTION_PATH = "benchmark/qapsoln/";
 const string QAP_INSTANCE_SOLUTION_EXTENSION = ".sln";
 
 namespace fs = std::filesystem;
+
+QAP_solution genetic_algorithm_default(QAP instance_qap){
+  return genetic_algorithm(instance_qap, 100, 60);
+}
 
 vector<string> get_problems() {
   vector<string> problems;
@@ -21,7 +29,7 @@ vector<string> get_problems() {
   return problems;
 }
 
-void run_benchmark(const string problem_name = "", const string type_alg = "", const int limit = -1) {
+void run_benchmark(const string problem_name = "", const string type_alg = "", const int limit = -1, int maxTime = 10*60) {
   
   vector<string> problems;
   if (problem_name != "") {
@@ -33,13 +41,25 @@ void run_benchmark(const string problem_name = "", const string type_alg = "", c
   cout << "Number of problems: " << problems.size() << '\n';
 
   // write to each file solution_exact.csv, solution_local_search.csv and solution_iterative_local_search.csv
-  ofstream solution_exact("benchmark/solution_exact.csv");
-  solution_exact << "Problem, N, Solution, Time\n";
-  ofstream solution_local_search("benchmark/solution_local_search.csv");
-  solution_local_search << "Problem, N, Solution, Time\n";
-  ofstream solution_iterative_local_search("benchmark/solution_iterative_local_search.csv");
-  solution_iterative_local_search << "Problem, N, Solution cost, Time\n";
+  ofstream solution_file("benchmark/solution_file_"+type_alg+".csv");
+  solution_file << "Problem,N,Solution,Time\n";
 
+  // pointer to the solver to be used
+  QAP_solution (*f_solver)(QAP) = nullptr;
+  if( type_alg == "exact" ) {
+    f_solver = solver;
+  }else if( type_alg == "local_search" ) {
+    f_solver = local_search_solution;
+  }else if( type_alg == "iterative_local_search" ) {
+    f_solver = iterative_local_search_solution;
+  }else if( type_alg == "genetic_algorithm" ) {
+    f_solver = genetic_algorithm_default;    
+  }else{
+    cout << "Invalid algorithm\n";
+    exit(1);
+  }
+
+  int test = 0;
   for (auto problem : problems) {
     cout << "Problem: " << problem << '\n';
     QAP qap = read_QAP(problem);
@@ -47,51 +67,30 @@ void run_benchmark(const string problem_name = "", const string type_alg = "", c
       continue;
     }
     cout << "N: " << qap.N << '\n';
-    cout << "Instance: " << QAP_to_string(qap) << '\n';
+    // cout << "Instance: " << QAP_to_string(qap) << '\n';
 
-    ll exact_solution_cost = -1;
-    chrono::microseconds exact_duration = chrono::microseconds(0);
+    // test for time break
+    QAP_solution ans;
+    int code = 0;
+		double miliseconds = measureTime([&code,maxTime,test,qap,&ans,f_solver](){
+			code = kill_after_timeout(maxTime,test,[qap,&ans,f_solver](){
+        ans = f_solver(qap);        
+			}); 
+		});
+    test += 1;
 
-    if (type_alg == "exact") {
-      // exact solver
-      cout << "Exact solver:\n";
-      auto start = chrono::high_resolution_clock::now();
-      auto exact_solution = solver(qap);
-      auto end = chrono::high_resolution_clock::now();
-      exact_duration = chrono::duration_cast<chrono::microseconds>(end - start);
-      exact_solution_cost = get_cost(qap, exact_solution);
-      cout << "Solution: " << exact_solution_cost << '\n';
-      cout << "Time: " << exact_duration.count() << " microseconds\n";
-      // write to file solution_exact.csv
-      solution_exact << problem << ", " << qap.N << ", " << exact_solution_cost << ", " << exact_duration.count() << '\n';
-    }
-
-    // local search solver
-    if (type_alg == "local_search") {
-      cout << "Local search solver:\n";
-      auto start = chrono::high_resolution_clock::now();
-      auto ls_solution = local_search_solution(qap);
-      auto end = chrono::high_resolution_clock::now();
-      auto ls_duration = chrono::duration_cast<chrono::microseconds>(end - start);
-      cout << "Solution: " << ls_solution.cost << '\n';
-      cout << "Time: " << ls_duration.count() << " microseconds\n";
-      // write to file solution_local_search.csv
-      solution_local_search << problem << ", " << qap.N << ", " << ls_solution.cost << ", " << ls_duration.count() << '\n';
-    }
-
-    // iterative local search solver
-    if (type_alg == "iterative_local_search") {
-      cout << "Iterative local search solver:\n";
-      auto start = chrono::high_resolution_clock::now();
-      auto ls_solution = iterative_local_search_solution(qap);
-      auto end = chrono::high_resolution_clock::now();
-      auto ls_duration = chrono::duration_cast<chrono::microseconds>(end - start);
-      cout << "Solution: " << ls_solution.cost << '\n';
-      cout << "Time: " << ls_duration.count() << " microseconds\n";
-      // write to file solution_iterative_local_search.csv
-      solution_iterative_local_search << problem << ", " << qap.N << ", " << ls_solution.cost << ", " << ls_duration.count() << '\n';
+    // check case of time break
+		if (code == -1){      
+      cout << "Time limit exceeded\n";
+      solution_file << problem << ", " << qap.N << ", " << -1 << ", " << maxTime*1000 << '\n';  
+    }else{
+      cout << "Solution: " << ans.cost << '\n';
+      cout << "Time: " << miliseconds << " milliseconds\n";
+      solution_file << problem << ", " << qap.N << ", " << ans.cost << ", " << miliseconds << '\n';
     }
   }
+
+  solution_file.close();
 }
 
 void print_help() {
@@ -105,6 +104,8 @@ void print_help() {
   cout << "               a third optional argument can be passed to specify witch \n";
   cout << "-l, --limit: run benchmark with a specific limit of the size of the problem\n";
   cout << "            the next argument must be the limit (e.g. 36)\n";
+  cout << "-t, --time: run benchmark with a specific time limit (in seconds), for a specific \n";
+  cout << "            algorithm in the second argument\n";
 }
 
 /**
@@ -168,5 +169,17 @@ int main(const int argc, const char *argv[]) {
     run_benchmark("", "", limit);
     return 0;
   }
+
+  if (options == "-t" || options == "--time") {
+    if (argc == 4) {
+      string type_alg = argv[2];
+      string max_time = argv[3];
+      run_benchmark("", type_alg,-1,stoi(max_time));
+      return 0;
+    }
+    run_benchmark();
+    return 0;
+  }
+
   return 0;
 }

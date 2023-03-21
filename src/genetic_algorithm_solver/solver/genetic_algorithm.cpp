@@ -83,6 +83,7 @@ vector<QAP_solution> select_survivors( vector<QAP_solution> population, vector<Q
  * @return     { cost, positions } 
  */
 QAP_solution genetic_algorithm(QAP instance_qap, int population_size, int max_iterations){
+  cout << "Genetic Algorithm" << endl;
   QAP_solution ans = {};
   vector<QAP_solution> population = buildInitialPopulation( instance_qap, population_size );
 
