@@ -56,5 +56,10 @@
     "streambuf": "cpp",
     "typeinfo": "cpp"
   },
-  "cSpell.words": ["qapdata", "QAPLIB", "qapsoln"]
+  "cSpell.words": ["qapdata", "QAPLIB", "qapsoln"],
+  "[cpp]": {
+    "editor.defaultFormatter": "ms-vscode.cpptools"
+  },
+  "editor.formatOnSave": true,
+  "C_Cpp.clang_format_fallbackStyle": "Google"
 }
