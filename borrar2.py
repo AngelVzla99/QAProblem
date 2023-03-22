@@ -6,6 +6,11 @@ model_names = ['solution_file_local_search']
 model_names.append('solution_file_iterative_local_search')
 model_names.append('solution_file_tabu_search')
 model_names.append('solution_file_genetic_algorithm')
+# ant colony search
+model_names.append('ant_colony_results/solution_file_ant_colony_search_50_4')
+model_names.append('ant_colony_results/solution_file_ant_colony_search_50_25')
+model_names.append('ant_colony_results/solution_file_ant_colony_search_50_50')
+model_names.append('ant_colony_results/solution_file_ant_colony_search_150_4')
 ans = []
 for model in model_names:
   # Read csv from file
