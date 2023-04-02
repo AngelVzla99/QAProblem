@@ -56,5 +56,10 @@
     "streambuf": "cpp",
     "typeinfo": "cpp"
   },
-  "cSpell.words": ["qapdata", "QAPLIB", "qapsoln"]
+  "cSpell.words": [
+    "qapdata",
+    "QAPLIB",
+    "qapsoln"
+  ],
+  "C_Cpp.errorSquiggles": "disabled"
 }
