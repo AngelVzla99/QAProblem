@@ -11,6 +11,8 @@ model_names.append('ant_colony_results/solution_file_ant_colony_search_50_4')
 model_names.append('ant_colony_results/solution_file_ant_colony_search_50_25')
 model_names.append('ant_colony_results/solution_file_ant_colony_search_50_50')
 model_names.append('ant_colony_results/solution_file_ant_colony_search_150_4')
+# memetic algorithm
+model_names.append('solution_file_memetic_algorithm')
 ans = []
 for model in model_names:
   # Read csv from file
