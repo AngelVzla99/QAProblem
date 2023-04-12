@@ -3,7 +3,6 @@
 
 CC = g++ -pthread
 CFLAGS = -I -w -Wall -std=c++20 -O3
-# CFLAGS = -g
 OBJ_DIR = objs
 SRC_DIR = src
 BIN_DIR = bin
@@ -25,6 +24,12 @@ ILSS = $(wildcard $(ILSS_DIR)/solver/*.cpp)
 GAS_DIR = $(SRC_DIR)/genetic_algorithm_solver
 GAS = $(wildcard $(GAS_DIR)/solver/*.cpp)
 
+TS_DIR = $(SRC_DIR)/tabu_search_solver
+TS = $(wildcard $(TS_DIR)/solver/*.cpp)
+
+UTILS_DIR = $(SRC_DIR)/utils
+CL = $(wildcard $(UTILS_DIR)/circular_list/*.cpp)
+
 MAS_DIR = $(SRC_DIR)/memetic_solver
 MAS = $(wildcard $(MAS_DIR)/solver/*.cpp)
 
@@ -40,8 +45,8 @@ $(OBJ_DIR)/qap.o: $(QAP)
 
 # Benchmark 
 
-main_benchmark: $(OBJ_DIR)/qap.o $(OBJ_DIR)/es.o $(OBJ_DIR)/lss.o $(OBJ_DIR)/ilss.o $(OBJ_DIR)/main_benchmark.o $(OBJ_DIR)/thKiller.o $(OBJ_DIR)/gas_mut.o $(OBJ_DIR)/gas_cros.o $(OBJ_DIR)/gas.o $(OBJ_DIR)/mas.o
-	$(CC) -o $(BIN_DIR)/$@ $^
+main_benchmark: $(OBJ_DIR)/qap.o $(OBJ_DIR)/es.o $(OBJ_DIR)/lss.o $(OBJ_DIR)/ilss.o $(OBJ_DIR)/cl.o $(OBJ_DIR)/ts.o $(OBJ_DIR)/main_benchmark.o $(OBJ_DIR)/thKiller.o $(OBJ_DIR)/gas_mut.o $(OBJ_DIR)/gas_cros.o $(OBJ_DIR)/gas.o $(OBJ_DIR)/mas.o
+	$(CC) $(CFLAGS) -o $(BIN_DIR)/$@ $^
 
 $(OBJ_DIR)/main_benchmark.o: $(SRC_DIR)/main.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -54,7 +59,7 @@ $(OBJ_DIR)/thKiller.o: $(THREAD_KILLER)
 # Exact solver
 
 main_exact_solver: $(OBJ_DIR)/qap.o $(OBJ_DIR)/es.o $(OBJ_DIR)/main_es.o
-	$(CC) -o $(BIN_DIR)/$@ $^
+	$(CC) $(CFLAGS) -o $(BIN_DIR)/$@ $^
 
 $(OBJ_DIR)/es.o: $(ES) $(QAP)
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -65,7 +70,7 @@ $(OBJ_DIR)/main_es.o: $(ES_DIR)/main.cpp $(ES)
 # Local search
 
 main_local_search: $(OBJ_DIR)/qap.o $(OBJ_DIR)/lss.o $(OBJ_DIR)/main_lss.o
-	$(CC) -o $(BIN_DIR)/$@ $^
+	$(CC) $(CFLAGS) -o $(BIN_DIR)/$@ $^
 
 $(OBJ_DIR)/lss.o: $(LSS)
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -76,7 +81,7 @@ $(OBJ_DIR)/main_lss.o: $(LSS_DIR)/main.cpp
 # Iterative local search
 
 main_iterative_local_search: $(OBJ_DIR)/qap.o $(OBJ_DIR)/lss.o $(OBJ_DIR)/ilss.o $(OBJ_DIR)/main_ilss.o 
-	$(CC) -o $(BIN_DIR)/$@ $^
+	$(CC) $(CFLAGS) -o $(BIN_DIR)/$@ $^
 
 $(OBJ_DIR)/ilss.o: $(ILSS)
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -87,7 +92,7 @@ $(OBJ_DIR)/main_ilss.o: $(ILSS_DIR)/main.cpp
 # Genetic algorithm 
 
 main_genetic_algorithm: $(OBJ_DIR)/qap.o $(OBJ_DIR)/gas_mut.o $(OBJ_DIR)/gas_cros.o $(OBJ_DIR)/gas.o $(OBJ_DIR)/main_gas.o
-	$(CC) -o $(BIN_DIR)/$@ $^
+	$(CC) $(CFLAGS) -o $(BIN_DIR)/$@ $^
 
 $(OBJ_DIR)/gas.o: $(GAS)
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -99,6 +104,22 @@ $(OBJ_DIR)/gas_cros.o: $(GAS_DIR)/solver/crossover/crossover.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR)/main_gas.o: $(GAS_DIR)/main.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Tabu search
+
+main_tabu_search: $(OBJ_DIR)/qap.o $(OBJ_DIR)/lss.o $(OBJ_DIR)/cl.o $(OBJ_DIR)/ts.o $(OBJ_DIR)/main_ts.o 
+	$(CC) $(CFLAGS) -o $(BIN_DIR)/$@ $^
+
+$(OBJ_DIR)/ts.o: $(TS)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJ_DIR)/main_ts.o: $(TS_DIR)/main.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Utils
+
+$(OBJ_DIR)/cl.o: $(CL)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # Memetic algorithm

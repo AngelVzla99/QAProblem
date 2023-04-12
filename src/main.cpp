@@ -10,6 +10,7 @@
 #include "iterative_local_search_solver/solver/iterative_local_search.hpp"
 #include "local_search_solver/solver/local_search.hpp"
 #include "memetic_solver/solver/memetic_algorithm.hpp"
+#include "tabu_search_solver/solver/tabu_search_solver.hpp"
 #include "thread_killer/thread_killer.hpp"
 
 unsigned int microsecond = 1000000;
@@ -50,7 +51,7 @@ void run_benchmark(const string problem_name = "", const string type_alg = "",
   // write to each file solution_exact.csv, solution_local_search.csv and
   // solution_iterative_local_search.csv
   ofstream solution_file("benchmark/solution_file_" + type_alg + ".csv");
-  solution_file << "Problem,N,Solution,Time\n";
+  solution_file << "Problem, N, Solution, Time\n";
 
   // pointer to the solver to be used
   QAP_solution (*f_solver)(QAP) = nullptr;
@@ -60,6 +61,8 @@ void run_benchmark(const string problem_name = "", const string type_alg = "",
     f_solver = local_search_solution;
   } else if (type_alg == "iterative_local_search") {
     f_solver = iterative_local_search_solution;
+  } else if (type_alg == "tabu_search") {
+    f_solver = tabu_search_solution;
   } else if (type_alg == "genetic_algorithm") {
     f_solver = genetic_algorithm_default;
   } else if (type_alg == "memetic_algorithm") {
