@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "QAP/QAP.hpp"
+#include "ant_colony_search_solver/solver/ant_colony_search.hpp"
 #include "exact_solver/solver/solver.hpp"
 #include "genetic_algorithm_solver/solver/genetic_algorithm.hpp"
 #include "iterative_local_search_solver/solver/iterative_local_search.hpp"
@@ -23,6 +24,12 @@ namespace fs = std::filesystem;
 
 QAP_solution genetic_algorithm_default(QAP instance_qap) {
   return genetic_algorithm(instance_qap, 100, 60);
+}
+
+QAP_solution ant_colony_search_solution_default(QAP instance_qap) {
+  QAP_solution current_solution = {1e18, vector<int>(instance_qap.N)};
+  return ant_colony_search_solution(instance_qap, current_solution, 0.5, 150,
+                                    4);
 }
 
 QAP_solution memetic_algorithm_default(QAP instance_qap) {
@@ -67,9 +74,11 @@ void run_benchmark(const string problem_name = "", const string type_alg = "",
     f_solver = genetic_algorithm_default;
   } else if (type_alg == "memetic_algorithm") {
     f_solver = memetic_algorithm_default;
+  } else if (type_alg == "ant_colony_search") {
+    f_solver = ant_colony_search_solution_default;
   } else {
-    cout << "Invalid algorithm\n";
-    exit(1);
+    cout << "Invalid algorithm type\n";
+    return;
   }
 
   int test = 0;

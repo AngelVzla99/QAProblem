@@ -33,6 +33,9 @@ CL = $(wildcard $(UTILS_DIR)/circular_list/*.cpp)
 MAS_DIR = $(SRC_DIR)/memetic_solver
 MAS = $(wildcard $(MAS_DIR)/solver/*.cpp)
 
+ACS_DIR = $(SRC_DIR)/ant_colony_search_solver
+ACS = $(wildcard $(ACS_DIR)/solver/*.cpp)
+
 THREAD_KILLER_DIR = $(SRC_DIR)/thread_killer
 THREAD_KILLER = $(wildcard $(THREAD_KILLER_DIR)/*.cpp)
 
@@ -43,9 +46,9 @@ all: main_exact_solver main_local_search main_iterative_local_search main_benchm
 $(OBJ_DIR)/qap.o: $(QAP)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Benchmark 
+# Benchmark  
 
-main_benchmark: $(OBJ_DIR)/qap.o $(OBJ_DIR)/es.o $(OBJ_DIR)/lss.o $(OBJ_DIR)/ilss.o $(OBJ_DIR)/cl.o $(OBJ_DIR)/ts.o $(OBJ_DIR)/main_benchmark.o $(OBJ_DIR)/thKiller.o $(OBJ_DIR)/gas_mut.o $(OBJ_DIR)/gas_cros.o $(OBJ_DIR)/gas.o $(OBJ_DIR)/mas.o
+main_benchmark: $(OBJ_DIR)/qap.o $(OBJ_DIR)/es.o $(OBJ_DIR)/lss.o $(OBJ_DIR)/ilss.o $(OBJ_DIR)/cl.o $(OBJ_DIR)/ts.o $(OBJ_DIR)/main_benchmark.o $(OBJ_DIR)/thKiller.o $(OBJ_DIR)/gas_mut.o $(OBJ_DIR)/gas_cros.o $(OBJ_DIR)/gas.o $(OBJ_DIR)/acs.o $(OBJ_DIR)/mas.o
 	$(CC) $(CFLAGS) -o $(BIN_DIR)/$@ $^
 
 $(OBJ_DIR)/main_benchmark.o: $(SRC_DIR)/main.cpp
@@ -131,6 +134,17 @@ $(OBJ_DIR)/mas.o: $(MAS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR)/main_mas.o: $(MAS_DIR)/main.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# And colony search algorithm
+
+main_ant_colony_search: $(OBJ_DIR)/qap.o $(OBJ_DIR)/acs.o $(OBJ_DIR)/main_acs.o
+	$(CC) -o $(BIN_DIR)/$@ $^
+
+$(OBJ_DIR)/main_acs.o: $(ACS_DIR)/main.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJ_DIR)/acs.o: $(ACS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # Clean files
