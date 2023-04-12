@@ -2,7 +2,8 @@
 # We can push them ....... and delete this (TODO)
 
 CC = g++ -pthread
-CFLAGS = -I -g -w -Wall -std=c++20
+CFLAGS = -I -w -Wall -std=c++20 -O3
+# CFLAGS = -g
 OBJ_DIR = objs
 SRC_DIR = src
 BIN_DIR = bin
@@ -24,6 +25,9 @@ ILSS = $(wildcard $(ILSS_DIR)/solver/*.cpp)
 GAS_DIR = $(SRC_DIR)/genetic_algorithm_solver
 GAS = $(wildcard $(GAS_DIR)/solver/*.cpp)
 
+MAS_DIR = $(SRC_DIR)/memetic_solver
+MAS = $(wildcard $(MAS_DIR)/solver/*.cpp)
+
 THREAD_KILLER_DIR = $(SRC_DIR)/thread_killer
 THREAD_KILLER = $(wildcard $(THREAD_KILLER_DIR)/*.cpp)
 
@@ -36,7 +40,7 @@ $(OBJ_DIR)/qap.o: $(QAP)
 
 # Benchmark 
 
-main_benchmark: $(OBJ_DIR)/qap.o $(OBJ_DIR)/es.o $(OBJ_DIR)/lss.o $(OBJ_DIR)/ilss.o $(OBJ_DIR)/main_benchmark.o $(OBJ_DIR)/thKiller.o $(OBJ_DIR)/gas_mut.o $(OBJ_DIR)/gas_cros.o $(OBJ_DIR)/gas.o
+main_benchmark: $(OBJ_DIR)/qap.o $(OBJ_DIR)/es.o $(OBJ_DIR)/lss.o $(OBJ_DIR)/ilss.o $(OBJ_DIR)/main_benchmark.o $(OBJ_DIR)/thKiller.o $(OBJ_DIR)/gas_mut.o $(OBJ_DIR)/gas_cros.o $(OBJ_DIR)/gas.o $(OBJ_DIR)/mas.o
 	$(CC) -o $(BIN_DIR)/$@ $^
 
 $(OBJ_DIR)/main_benchmark.o: $(SRC_DIR)/main.cpp
@@ -95,6 +99,17 @@ $(OBJ_DIR)/gas_cros.o: $(GAS_DIR)/solver/crossover/crossover.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR)/main_gas.o: $(GAS_DIR)/main.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Memetic algorithm
+
+main_memetic_algorithm: $(OBJ_DIR)/qap.o $(OBJ_DIR)/gas_mut.o $(OBJ_DIR)/gas_cros.o $(OBJ_DIR)/gas.o $(OBJ_DIR)/lss.o $(OBJ_DIR)/mas.o $(OBJ_DIR)/main_mas.o
+	$(CC) -o $(BIN_DIR)/$@ $^
+
+$(OBJ_DIR)/mas.o: $(MAS)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJ_DIR)/main_mas.o: $(MAS_DIR)/main.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # Clean files
