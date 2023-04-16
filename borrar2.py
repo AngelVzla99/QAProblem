@@ -13,6 +13,13 @@ model_names.append('ant_colony_results/solution_file_ant_colony_search_50_50')
 model_names.append('ant_colony_results/solution_file_ant_colony_search_150_4')
 # memetic algorithm
 model_names.append('solution_file_memetic_algorithm')
+# Multi modal
+model_names.append('multi_modal/solution_file_multi_modal_popSize:100_maxIter:10_step:10')
+model_names.append('multi_modal/solution_file_multi_modal_popSize:100_maxIter:10_step:15')
+# model_names.append('multi_modal/solution_file_multi_modal_popSize:100_maxIter:15_step:10')
+model_names.append('multi_modal/solution_file_multi_modal_popSize:100_maxIter:15_step:15')
+model_names.append('multi_modal/solution_file_multi_modal_LS:25_popSize:100_maxIter:15_step:15')
+model_names.append('multi_modal/solution_file_multi_modal_LS:75_popSize:100_maxIter:15_step:15')
 ans = []
 for model in model_names:
   # Read csv from file
@@ -53,4 +60,4 @@ for model in model_names:
 
 df_models = pd.DataFrame(ans)
 df_models.to_csv('benchmark/results.csv', index=False)
-print(df_models.head(10))
+print(df_models.head(20))

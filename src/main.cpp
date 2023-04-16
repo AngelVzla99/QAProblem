@@ -9,6 +9,7 @@
 #include "thread_killer/thread_killer.hpp"
 #include "genetic_algorithm_solver/solver/genetic_algorithm.hpp"
 #include "ant_colony_search_solver/solver/ant_colony_search.hpp"
+#include "multi_modal_solver/solver/multi_modal.hpp"
 
 unsigned int microsecond = 1000000;
 const string QAP_INSTANCE_PATH = "benchmark/qapdata/";
@@ -35,7 +36,7 @@ vector<string> get_problems() {
   return problems;
 }
 
-void run_benchmark(const string problem_name = "", const string type_alg = "", const int limit = -1, int maxTime = 10*60) {
+void run_benchmark(const string problem_name = "", const string type_alg = "", const int limit = -1, int maxTime = 20*60) {
 
   vector<string> problems;
   if (problem_name != "") {
@@ -102,6 +103,60 @@ void run_benchmark(const string problem_name = "", const string type_alg = "", c
 
 }
 
+void run_benchmark_V2(
+  // f_solver, lambda function of the form <lambda(QAP, QAP_solution)>
+  function<QAP_solution(QAP, QAP_solution&)> f_solver,
+  string folder, 
+  string file_name, 
+  int maxTime = 20*60
+) {
+
+  vector<string> problems = get_problems();
+  cout << "Number of problems: " << problems.size() << '\n';
+
+  // write to each file solution_exact.csv, solution_local_search.csv and solution_iterative_local_search.csv
+  ofstream solution_file("benchmark/"+folder+"/solution_file_"+file_name+".csv");
+  solution_file << "Problem,N,Solution,Time\n";
+
+  int test = 0;
+  QAP_solution ans_list[problems.size()];
+  for (auto problem : problems) {
+    cout << "Problem: " << problem << '\n';
+    QAP qap = read_QAP(problem);
+    cout << "N: " << qap.N << '\n';
+
+    // test for time break
+    int code = 0;
+    QAP_solution &ans = ans_list[test] = {1e18,{}};
+		double miliseconds = measureTime([&code,maxTime,test,qap,&ans,f_solver](){
+			code = kill_after_timeout(maxTime,test,[qap,&ans,f_solver](){
+        ans = f_solver(qap,ans);
+			}); 
+		});
+    
+    // check case of time break
+		if ( ans.cost==1e18 ){  
+      // time limit exceeded in red
+      cout << "\033[1;31mTime limit exceeded\033[0m\n";
+      solution_file << problem << ", " << qap.N << ", " << -1 << ", " << maxTime*1000 << '\n';  
+    }else{
+      if( code == -1 ){
+        // time limit exceeded in red
+        cout << "\033[1;31mTime limit exceeded\033[0m\n";
+      }
+
+      cout << "Solution: " << ans.cost << '\n';
+      cout << "Time: " << miliseconds << " milliseconds\n";
+      solution_file << problem << ", " << qap.N << ", " << ans.cost << ", " << miliseconds << '\n';
+    }
+
+    test += 1;
+  }
+
+  solution_file.close();
+}
+
+
 void print_help() {
   cout << "Options:\n";
   cout << "-h, --help: show help\n";
@@ -115,6 +170,7 @@ void print_help() {
   cout << "            the next argument must be the limit (e.g. 36)\n";
   cout << "-t, --time: run benchmark with a specific time limit (in seconds), for a specific \n";
   cout << "            algorithm in the second argument\n";
+  cout << "-b2 --benchmark2: run benchmark with a specific algorithm in the second argument\n";
 }
 
 /**
@@ -189,6 +245,40 @@ int main(const int argc, const char *argv[]) {
     run_benchmark();
     return 0;
   }
+
+  if(options == "-b2" || options == "--benchmark2"){
+    if (argc == 3) {
+      string type_alg = argv[2];
+
+      if(type_alg == "multi_modal"){
+        // multi_modal tuning parameters
+        // * changing the population size
+        // return multi_modal_solution(qap, ans, 10, 100, 10, 10, false);
+
+        vector<int> pop_sizes = { 100 };
+        vector<int> max_iters = { 15 };
+        vector<int> steps = { 15 };
+
+        for( auto pop_size : pop_sizes ){
+          for( auto max_iter : max_iters ){
+            for( auto step : steps ){
+              auto f = [&](QAP qap, QAP_solution &ans){
+                return multi_modal_solution(qap, ans, 5, pop_size, max_iter, step, false);
+              };
+
+              run_benchmark_V2(f, type_alg, "multi_modal_LS:75_popSize:"+to_string(pop_size)+"_maxIter:"+to_string(max_iter)+"_step:"+to_string(step));
+            }
+          }
+        }
+      }
+      return 0;
+    }else{
+      cout << "No algorithm specified, use -h or --help to see the options\n";
+      exit(1);
+    }
+  }
+
+
 
   return 0;
 }

@@ -62,7 +62,7 @@ vector<QAP_solution> select_parents( vector<QAP_solution> population ){
  * 
  * @return     List of QAP_solutions with the survivors
  */
-vector<QAP_solution> select_survivors( vector<QAP_solution> population, vector<QAP_solution> children, int population_size ){
+vector<QAP_solution> select_survivors( vector<QAP_solution> population, vector<QAP_solution> children, int population_size, QAP instance_qap ){
   vector<QAP_solution> ans;
   for(auto indv: children) population.push_back(indv);
   sort(
@@ -72,6 +72,20 @@ vector<QAP_solution> select_survivors( vector<QAP_solution> population, vector<Q
   ); 
   FOR(i,0,min(population_size,int(population.size()))) 
     ans.push_back(population[i]);
+
+  // save values before local search
+  vector<QAP_solution> ans_before_local_search = ans;
+
+  // do local search in the top 5 of individuals with a probability of 0.15
+  FOR(i,0,min(5,int(ans.size()))) if(rand()%100<15)
+    ans[i] = start_local_search_solution( ans[i].positions, instance_qap );
+  
+  // print percentage of improvement
+  long long diff = 0;
+  FOR(i,0,min(5,int(ans.size()))) if(ans[i].cost < ans_before_local_search[i].cost){
+    diff += ans_before_local_search[i].cost - ans[i].cost;
+  }
+
   return ans;
 }
 
@@ -92,7 +106,7 @@ QAP_solution genetic_algorithm(QAP instance_qap, int population_size, int max_it
     vector<QAP_solution> parents = select_parents( population );
     vector<QAP_solution> children = crossover( instance_qap, parents );
     children = mutation( instance_qap, iteration, children );
-    population = select_survivors( population, children, population_size );
+    population = select_survivors( population, children, population_size, instance_qap );
 
     // save the best solution
     if( population[0].cost < ans.cost || iteration==0 ) 
@@ -102,4 +116,36 @@ QAP_solution genetic_algorithm(QAP instance_qap, int population_size, int max_it
   }
 
   return ans;
+}
+
+/**
+ * @brief This function implements the genetic algorithm to solve the QAP, used only for
+ * the multi-modal solver
+ * 
+ * @param[in]  instance_qap  The instance of a quadratic assignment problem
+ * 
+ * @return    current population
+ */
+void genetic_algorithm_multi_modal(
+  QAP instance_qap, 
+  vector<QAP_solution> &population,
+  int start_iteration, 
+  int max_iterations, 
+  QAP_solution &ans
+){
+
+  int population_size = population.size();
+  int iteration = start_iteration;
+  while( !end_genetic_algorithm(iteration,population,max_iterations) ){
+    vector<QAP_solution> parents = select_parents( population );
+    vector<QAP_solution> children = crossover( instance_qap, parents );
+    children = mutation( instance_qap, iteration, children );
+    population = select_survivors( population, children, population_size, instance_qap );
+
+    // save the best solution
+    if( population[0].cost < ans.cost )
+      ans = population[0];
+    iteration++;
+  }
+
 }

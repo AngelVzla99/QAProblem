@@ -166,6 +166,7 @@ vector<QAP_solution> crossover( QAP instance_qap, vector<QAP_solution> parents )
 
   // array of crossover functions
   QAP_solution (*crossover_functions[])(QAP,QAP_solution,QAP_solution) = {
+    random,
     random_with_order,
     two_points,
     partially_mapped_junction
@@ -175,7 +176,7 @@ vector<QAP_solution> crossover( QAP instance_qap, vector<QAP_solution> parents )
   vector<QAP_solution> ans;
   FOR(i,0,N){
     FOR(j,i+1,N){
-      QAP_solution child = crossover_functions[rand()%3](instance_qap,parents[i],parents[j]);
+      QAP_solution child = crossover_functions[rand()%4](instance_qap,parents[i],parents[j]);
       ans.push_back(child); 
     }
   }
