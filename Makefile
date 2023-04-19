@@ -30,6 +30,9 @@ ACS = $(wildcard $(ACS_DIR)/solver/*.cpp)
 MM_DIR = $(SRC_DIR)/multi_modal_solver
 MM = $(wildcard $(MM_DIR)/solver/*.cpp)
 
+TEACHER_STUDENT_DIR = $(SRC_DIR)/teacher_student_solver
+TEACHER_STUDENT = $(wildcard $(TEACHER_STUDENT_DIR)/solver/*.cpp)
+
 THREAD_KILLER_DIR = $(SRC_DIR)/thread_killer
 THREAD_KILLER = $(wildcard $(THREAD_KILLER_DIR)/*.cpp)
 
@@ -42,7 +45,7 @@ $(OBJ_DIR)/qap.o: $(QAP)
 
 # Benchmark  
 
-main_benchmark: $(OBJ_DIR)/qap.o $(OBJ_DIR)/es.o $(OBJ_DIR)/lss.o $(OBJ_DIR)/ilss.o $(OBJ_DIR)/main_benchmark.o $(OBJ_DIR)/thKiller.o $(OBJ_DIR)/gas_mut.o $(OBJ_DIR)/gas_cros.o $(OBJ_DIR)/gas.o $(OBJ_DIR)/acs.o $(OBJ_DIR)/mm.o	
+main_benchmark: $(OBJ_DIR)/qap.o $(OBJ_DIR)/es.o $(OBJ_DIR)/lss.o $(OBJ_DIR)/ilss.o $(OBJ_DIR)/main_benchmark.o $(OBJ_DIR)/thKiller.o $(OBJ_DIR)/gas_mut.o $(OBJ_DIR)/gas_cros.o $(OBJ_DIR)/gas.o $(OBJ_DIR)/acs.o $(OBJ_DIR)/mm.o	$(OBJ_DIR)/teacher_student.o
 	$(CC) -o $(BIN_DIR)/$@ $^
 
 $(OBJ_DIR)/main_benchmark.o: $(SRC_DIR)/main.cpp
@@ -123,6 +126,17 @@ $(OBJ_DIR)/mm.o: $(MM)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR)/main_mm.o: $(MM_DIR)/main.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Teacher student solver
+
+main_teacher_student: $(OBJ_DIR)/qap.o $(OBJ_DIR)/teacher_student.o $(OBJ_DIR)/main_teacher_student.o
+	$(CC) -o $(BIN_DIR)/$@ $^
+
+$(OBJ_DIR)/teacher_student.o: $(TEACHER_STUDENT)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJ_DIR)/main_teacher_student.o: $(TEACHER_STUDENT_DIR)/main.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # Clean files
