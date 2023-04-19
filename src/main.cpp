@@ -10,6 +10,7 @@
 #include "genetic_algorithm_solver/solver/genetic_algorithm.hpp"
 #include "ant_colony_search_solver/solver/ant_colony_search.hpp"
 #include "multi_modal_solver/solver/multi_modal.hpp"
+#include "teacher_student_solver/solver/teacher_student.hpp"
 
 unsigned int microsecond = 1000000;
 const string QAP_INSTANCE_PATH = "benchmark/qapdata/";
@@ -267,6 +268,24 @@ int main(const int argc, const char *argv[]) {
               };
 
               run_benchmark_V2(f, type_alg, "multi_modal_LS:75_popSize:"+to_string(pop_size)+"_maxIter:"+to_string(max_iter)+"_step:"+to_string(step));
+            }
+          }
+        }
+      }else if(type_alg=="teacher_student"){
+        // teacher_student tuning parameters
+        vector<int> n_students = { 20, 50, 100 };
+        vector<int> n_teachers = { 20, 50, 100 };
+        vector<int> max_iterations = { 10, 50, 100 }; 
+
+        for( auto n_stu : n_students ){
+          for( auto n_tea : n_teachers ){
+            for( auto n_iter : max_iterations ){
+              if(n_stu < n_tea) continue;
+              auto f = [&](QAP qap, QAP_solution &ans){
+                return teacher_student_solution(qap, ans, n_stu, n_tea, n_iter, false);
+              };
+
+              run_benchmark_V2(f, type_alg, "teacher_student_nStudents:"+to_string(n_stu)+"_nTeachers:"+to_string(n_tea)+"_maxIter:"+to_string(n_iter));
             }
           }
         }
