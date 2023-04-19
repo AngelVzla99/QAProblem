@@ -20,6 +20,25 @@ model_names.append('multi_modal/solution_file_multi_modal_popSize:100_maxIter:10
 model_names.append('multi_modal/solution_file_multi_modal_popSize:100_maxIter:15_step:15')
 model_names.append('multi_modal/solution_file_multi_modal_LS:25_popSize:100_maxIter:15_step:15')
 model_names.append('multi_modal/solution_file_multi_modal_LS:75_popSize:100_maxIter:15_step:15')
+# Teacher student
+model_names.append('teacher_student/solution_file_teacher_student_nStudents:5_nTeachers:5_maxIter:10')
+model_names.append('teacher_student/solution_file_teacher_student_nStudents:5_nTeachers:5_maxIter:50')
+model_names.append('teacher_student/solution_file_teacher_student_nStudents:5_nTeachers:5_maxIter:100')
+# model_names.append('teacher_student/solution_file_teacher_student_nStudents:5_nTeachers:20_maxIter:10')
+model_names.append('teacher_student/solution_file_teacher_student_nStudents:20_nTeachers:20_maxIter:10')
+model_names.append('teacher_student/solution_file_teacher_student_nStudents:20_nTeachers:20_maxIter:50')
+model_names.append('teacher_student/solution_file_teacher_student_nStudents:20_nTeachers:20_maxIter:100')
+# model_names.append('teacher_student/solution_file_teacher_student_nStudents:20_nTeachers:50_maxIter:10')
+model_names.append('teacher_student/solution_file_teacher_student_nStudents:50_nTeachers:50_maxIter:10')
+model_names.append('teacher_student/solution_file_teacher_student_nStudents:50_nTeachers:20_maxIter:10')
+model_names.append('teacher_student/solution_file_teacher_student_nStudents:50_nTeachers:20_maxIter:50')
+model_names.append('teacher_student/solution_file_teacher_student_nStudents:50_nTeachers:20_maxIter:100')
+model_names.append('teacher_student/solution_file_teacher_student_nStudents:50_nTeachers:50_maxIter:10')
+model_names.append('teacher_student/solution_file_teacher_student_nStudents:50_nTeachers:50_maxIter:50')
+model_names.append('teacher_student/solution_file_teacher_student_nStudents:50_nTeachers:50_maxIter:100')
+model_names.append('teacher_student/solution_file_teacher_student_nStudents:100_nTeachers:20_maxIter:10')
+model_names.append('teacher_student/solution_file_teacher_student_nStudents:100_nTeachers:20_maxIter:50')
+model_names.append('teacher_student/solution_file_teacher_student_nStudents:100_nTeachers:20_maxIter:100')
 ans = []
 for model in model_names:
   # Read csv from file
