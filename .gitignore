@@ -1,4 +1,4 @@
 src/QAPSolver
 *.o
-objs
+objs/*
 bin/*
