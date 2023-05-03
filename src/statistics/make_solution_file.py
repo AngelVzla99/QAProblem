@@ -1,3 +1,7 @@
+"""
+In this file we get the exact solution to each of the problems in the QAPlib benchmark.
+"""
+
 import pandas as pd
 
 df = pd.read_csv('benchmark/solution_file_local_search.csv')

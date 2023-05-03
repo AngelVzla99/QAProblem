@@ -2,3 +2,4 @@ src/QAPSolver
 *.o
 objs/*
 bin/*
+.vscode
