@@ -32,6 +32,8 @@ $ make main_main_benchmark
 $ ./bin/main_main_benchmark
 ```
 
+We add a simple CLI to select the solver and the test.
+
 # Results 
 
 The results can be found in documents/paper.pdf file
