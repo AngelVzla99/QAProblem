@@ -1,3 +1,8 @@
+"""
+In this file we compress the information that we get for each solver, to make a 
+result table, we calculate the percentage of error, and the time for each solver.
+"""
+
 import pandas as pd
 
 solutions = pd.read_csv('benchmark/solutions.csv')
@@ -16,7 +21,6 @@ model_names.append('solution_file_memetic_algorithm')
 # Multi modal
 model_names.append('multi_modal/solution_file_multi_modal_popSize:100_maxIter:10_step:10')
 model_names.append('multi_modal/solution_file_multi_modal_popSize:100_maxIter:10_step:15')
-# model_names.append('multi_modal/solution_file_multi_modal_popSize:100_maxIter:15_step:10')
 model_names.append('multi_modal/solution_file_multi_modal_popSize:100_maxIter:15_step:15')
 model_names.append('multi_modal/solution_file_multi_modal_LS:25_popSize:100_maxIter:15_step:15')
 model_names.append('multi_modal/solution_file_multi_modal_LS:75_popSize:100_maxIter:15_step:15')
@@ -24,11 +28,9 @@ model_names.append('multi_modal/solution_file_multi_modal_LS:75_popSize:100_maxI
 model_names.append('teacher_student/solution_file_teacher_student_nStudents:5_nTeachers:5_maxIter:10')
 model_names.append('teacher_student/solution_file_teacher_student_nStudents:5_nTeachers:5_maxIter:50')
 model_names.append('teacher_student/solution_file_teacher_student_nStudents:5_nTeachers:5_maxIter:100')
-# model_names.append('teacher_student/solution_file_teacher_student_nStudents:5_nTeachers:20_maxIter:10')
 model_names.append('teacher_student/solution_file_teacher_student_nStudents:20_nTeachers:20_maxIter:10')
 model_names.append('teacher_student/solution_file_teacher_student_nStudents:20_nTeachers:20_maxIter:50')
 model_names.append('teacher_student/solution_file_teacher_student_nStudents:20_nTeachers:20_maxIter:100')
-# model_names.append('teacher_student/solution_file_teacher_student_nStudents:20_nTeachers:50_maxIter:10')
 model_names.append('teacher_student/solution_file_teacher_student_nStudents:50_nTeachers:50_maxIter:10')
 model_names.append('teacher_student/solution_file_teacher_student_nStudents:50_nTeachers:20_maxIter:10')
 model_names.append('teacher_student/solution_file_teacher_student_nStudents:50_nTeachers:20_maxIter:50')
@@ -42,7 +44,7 @@ model_names.append('teacher_student/solution_file_teacher_student_nStudents:100_
 ans = []
 for model in model_names:
   # Read csv from file
-  df = pd.read_csv('benchmark/'+model+'.csv')
+  df = pd.read_csv('../../benchmark/'+model+'.csv')
 
   # joint between solutions and df
   df = df.merge(solutions, on='Problem', how='left')
