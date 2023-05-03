@@ -23,6 +23,8 @@ $ make main_{SOLVER_NAME}
 $ ./bin/main_{SOLVER_NAME}
 ```
 
+(you can find the name of the solvers in our Make file)
+
 If you want to test a solver in the benchmark you can do this:
 
 ```sh
