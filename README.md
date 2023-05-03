@@ -1,5 +1,5 @@
 # QAProblem
-This repository have different solvers for the [Quadratic assignment problem](https://en.wikipedia.org/wiki/Quadratic_assignment_problem) in c++, this is a well know NP-Complete problem, for this we decide to try different meta heuristics to the better solutions as posible in our benchmark. 
+This repository have different solvers for the [Quadratic assignment problem](https://en.wikipedia.org/wiki/Quadratic_assignment_problem) in c++, this is a well know NP-Complete problem, for this we decide to try different meta heuristics to find the best solutions as posible in our benchmark. 
 
 # Algorithms used:
 * Local search
@@ -9,6 +9,8 @@ This repository have different solvers for the [Quadratic assignment problem](ht
 * Genetic algorithm with multiple populations
 * Ant cololny optimization
 * Memetic algorithm
+
+A description of each algorithm and the implementation can be found in *documents/Paper.pdf* file.
 
 # How is structured this repository ?
 
@@ -36,4 +38,4 @@ We add a simple CLI to select the solver and the test.
 
 # Results 
 
-The results can be found in documents/paper.pdf file
+The results can be found in *documents/Paper.pdf* file
